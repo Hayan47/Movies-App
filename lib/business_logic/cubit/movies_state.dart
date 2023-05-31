@@ -10,9 +10,3 @@ class MoviesLoaded extends MoviesState {
 
   MoviesLoaded(this.characters);
 }
-
-// class QuotesLoaded extends MoviesState {
-//   final List<Quote> quotes;
-
-//   QuotesLoaded(this.quotes);
-// }

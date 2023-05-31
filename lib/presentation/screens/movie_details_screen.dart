@@ -7,50 +7,30 @@ import 'package:movies_app/constants/my_colors.dart';
 import 'package:movies_app/data/models/movie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movies_app/data/models/movie_details.dart';
+import 'package:movies_app/presentation/widgets/movie_info_list.dart';
 
-class MovieDetailsScreen extends StatelessWidget {
+import '../../business_logic/cubit/movie_details_cubit.dart';
+import '../widgets/movie_info.dart';
+
+class MovieDetailsScreen extends StatefulWidget {
   final Movie selectedMovie;
 
-  MovieDetailsScreen({super.key, required this.selectedMovie});
+  const MovieDetailsScreen({super.key, required this.selectedMovie});
 
-  Widget MovieInfo(String title, String value) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: GoogleFonts.karla(
-            color: Colors.red,
-            fontSize: 18,
-          ),
-        ),
-        const SizedBox(width: 10),
-        Expanded(
-            child: Text(
-          value,
-          style: GoogleFonts.karla(
-            color: Colors.white,
-            fontSize: 16,
-          ),
-        )),
-      ],
-      // maxLines: 1,
-      // overflow: TextOverflow.ellipsis,
-      // text: TextSpan(
-      //   children: [
-      //     TextSpan(
-      //       text: title,
-      //       style: const TextStyle(
-      //           color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
-      //     ),
-      //     TextSpan(
-      //       text: value,
-      //       style: const TextStyle(color: Colors.white, fontSize: 16),
-      //     )
-      //   ],
-      // ),
-    );
+  @override
+  State<MovieDetailsScreen> createState() => _MovieDetailsScreenState();
+}
+
+class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
+  MovieDetails details = MovieDetails();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<MovieDetailsCubit>().getMovieDetails(widget.selectedMovie.id!);
+    print('h');
   }
 
   Widget buildDevider() {
@@ -71,162 +51,223 @@ class MovieDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String image =
-        'https://image.tmdb.org/t/p/original' '${selectedMovie.backdropPath}';
-    String poster =
-        'https://image.tmdb.org/t/p/original' '${selectedMovie.posterPath}';
-    //BlocProvider.of<MoviesCubit>(context).getQuotes(selectedMovie.title!);
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            actions: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: BlocBuilder<FavoriteCubit, List<Movie>>(
-                  builder: (context, state) {
-                    return GestureDetector(
-                        onTap: () {
-                          if (state.contains(selectedMovie)) {
-                            context
-                                .read<FavoriteCubit>()
-                                .removeFromList(selectedMovie);
-                          } else {
-                            context
-                                .read<FavoriteCubit>()
-                                .addToList(selectedMovie);
-                          }
-                        },
-                        child: state.contains(selectedMovie)
-                            ? Image.asset(
-                                'assets/icons/love2.png',
-                                width: 30,
-                                height: 30,
-                              )
-                            : Image.asset(
-                                'assets/icons/love.png',
-                                width: 30,
-                                height: 30,
-                              ));
-                  },
-                ),
-              )
-            ],
-            expandedHeight: 600,
-            pinned: true,
-            stretch: true,
+    return BlocBuilder<MovieDetailsCubit, MovieDetailsState>(
+      builder: (context, state) {
+        if (state is MovieDetailsLoaded) {
+          details = (state).movieDetails;
+          return Scaffold(
             backgroundColor: Colors.black,
-            flexibleSpace: FlexibleSpaceBar(
-              centerTitle: true,
-              title: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  color: Colors.black.withOpacity(0.5),
-                ),
-                child: Text(
-                  '${selectedMovie.title}',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.karla(
-                    color: MyColors.myGold,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              background: Hero(
-                tag: selectedMovie,
-                child: CachedNetworkImage(
-                  imageUrl: image,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              Container(
-                margin: const EdgeInsets.fromLTRB(14, 14, 14, 0),
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Overview',
-                      style: GoogleFonts.karla(
-                        color: Colors.red,
-                        fontSize: 18,
+            body: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: BlocBuilder<FavoriteCubit, List<Movie>>(
+                        builder: (context, state) {
+                          return GestureDetector(
+                              onTap: () {
+                                if (state.contains(widget.selectedMovie)) {
+                                  context
+                                      .read<FavoriteCubit>()
+                                      .removeFromList(widget.selectedMovie);
+                                } else {
+                                  context
+                                      .read<FavoriteCubit>()
+                                      .addToList(widget.selectedMovie);
+                                }
+                              },
+                              child: state.contains(widget.selectedMovie)
+                                  ? Image.asset(
+                                      'assets/icons/love2.png',
+                                      width: 30,
+                                      height: 30,
+                                    )
+                                  : Image.asset(
+                                      'assets/icons/love.png',
+                                      width: 30,
+                                      height: 30,
+                                    ));
+                        },
                       ),
-                    ),
-                    Text(
-                      selectedMovie.overview!,
-                      style: GoogleFonts.karla(
-                        color: Colors.white,
-                        fontSize: 16,
+                    )
+                  ],
+                  expandedHeight: 600,
+                  pinned: true,
+                  stretch: true,
+                  backgroundColor: Colors.black,
+                  flexibleSpace: FlexibleSpaceBar(
+                    centerTitle: true,
+                    title: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        color: Colors.black.withOpacity(0.5),
                       ),
-                    ),
-                    buildDevider(),
-                    MovieInfo('Release Date : ', selectedMovie.releaseDate!),
-                    buildDevider(),
-                    MovieInfo(
-                        'Rating : ', selectedMovie.voteAverage.toString()),
-                    buildDevider(),
-                    MovieInfo(
-                        'Votes Count : ', selectedMovie.voteCount.toString()),
-                    buildDevider(),
-
-                    MovieInfo(
-                        'Orginal Language : ', selectedMovie.originalLanguage!),
-                    const SizedBox(height: 25),
-                    Center(
                       child: Text(
-                        'Official Poster',
+                        '${details.title}',
+                        textAlign: TextAlign.center,
                         style: GoogleFonts.karla(
-                          color: Colors.red,
-                          fontSize: 30,
+                          color: MyColors.myred,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    const SizedBox(height: 25),
-
-                    CachedNetworkImage(imageUrl: poster),
-
-                    //Todo blocbuilder
-                    // BlocBuilder<CharactersCubit, CharactersState>(
-                    //   builder: (context, state) {
-                    //     if (state is QuotesLoaded) {
-                    //       var quotes = state.quotes;
-                    //       if (quotes.isNotEmpty) {
-                    //         int randomQuoteIndex =
-                    //             Random().nextInt(quotes.length - 1);
-                    //         return Center(
-                    //           child: DefaultTextStyle(
-                    //             textAlign: TextAlign.center,
-                    //             style: const TextStyle(
-                    //               color: Colors.white,
-                    //               fontSize: 22,
-                    //             ),
-                    //             child: Text(quotes[randomQuoteIndex].quote),
-                    //           ),
-                    //         );
-                    //       } else {
-                    //         // print('hayan');
-                    //         // print(quotes);
-                    //         return const Text('no quote');
-                    //       }
-                    //     } else {
-                    //       return showProgressIndicator();
-                    //     }
-                    //   },
-                    // )
-                  ],
+                    background: Hero(
+                      tag: widget.selectedMovie,
+                      child: CachedNetworkImage(
+                        imageUrl: 'https://image.tmdb.org/t/p/original'
+                            '${widget.selectedMovie.backdropPath}',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
                 ),
-              )
-            ]),
-          ),
-        ],
-      ),
+                SliverList(
+                  delegate: SliverChildListDelegate([
+                    Container(
+                      margin: const EdgeInsets.fromLTRB(14, 14, 14, 0),
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Text(
+                              details.tagline!,
+                              style: GoogleFonts.dancingScript(
+                                color: MyColors.myFire,
+                                fontSize: 32,
+                              ),
+                            ),
+                          ),
+                          details.adult!
+                              ? Image.asset(
+                                  'assets/icons/adult.png',
+                                  width: 15,
+                                  height: 15,
+                                )
+                              : Container(),
+                          Text(
+                            'Overview',
+                            style: GoogleFonts.karla(
+                              color: Colors.red,
+                              fontSize: 18,
+                            ),
+                          ),
+                          Text(
+                            details.overview!,
+                            style: GoogleFonts.karla(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          buildDevider(),
+                          MovieInfoList(
+                            title: 'Genre',
+                            values: details.genres!,
+                          ),
+                          buildDevider(),
+                          MovieInfo(
+                            title: 'Release Date : ',
+                            value: details.releaseDate!,
+                          ),
+                          buildDevider(),
+                          MovieInfo(
+                            title: 'Run Time : ',
+                            value: '${details.runtime.toString()} Days',
+                          ),
+                          buildDevider(),
+                          MovieInfo(
+                            title: 'Rating : ',
+                            value: '${details.voteAverage.toString()} \/ 10',
+                          ),
+                          buildDevider(),
+                          MovieInfo(
+                            title: 'Votes Count : ',
+                            value: details.voteCount.toString(),
+                          ),
+                          buildDevider(),
+                          MovieInfo(
+                            title: 'Orginal Language : ',
+                            value: details.originalLanguage!,
+                          ),
+                          buildDevider(),
+                          MovieInfo(
+                            title: 'Budget : ',
+                            value: '${details.budget.toString()} \$',
+                          ),
+                          buildDevider(),
+                          MovieInfo(
+                            title: 'Revenue : ',
+                            value: '${details.revenue.toString()} \$',
+                          ),
+                          buildDevider(),
+                          MovieInfoList(
+                            title: 'Companies',
+                            values: details.productionCompanies!,
+                          ),
+                          const SizedBox(height: 10),
+                          Center(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: List.generate(
+                                    details.productionCompanies!.length,
+                                    (index) {
+                                  return (details.productionCompanies![index]
+                                              .logoPath !=
+                                          null)
+                                      ? Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 1),
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 4),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            color: Colors.grey,
+                                          ),
+                                          height: 25,
+                                          child: Center(
+                                            child: CachedNetworkImage(
+                                                imageUrl:
+                                                    'https://image.tmdb.org/t/p/original'
+                                                    '${details.productionCompanies![index].logoPath}'),
+                                          ),
+                                        )
+                                      : Container();
+                                }),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 25),
+                          Center(
+                            child: Text(
+                              'Official Poster',
+                              style: GoogleFonts.karla(
+                                color: Colors.red,
+                                fontSize: 30,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 25),
+                          CachedNetworkImage(
+                              imageUrl: 'https://image.tmdb.org/t/p/original'
+                                  '${widget.selectedMovie.posterPath}'),
+                        ],
+                      ),
+                    )
+                  ]),
+                ),
+              ],
+            ),
+          );
+        } else {
+          return const Center(
+              child: CircularProgressIndicator(color: Colors.white));
+        }
+      },
     );
   }
 }

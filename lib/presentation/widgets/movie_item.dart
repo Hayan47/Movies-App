@@ -10,8 +10,6 @@ class MovieItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String image =
-        'https://image.tmdb.org/t/p/original' + '${movie.backdropPath}';
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -44,7 +42,8 @@ class MovieItem extends StatelessWidget {
                 child: movie.backdropPath!.isNotEmpty
                     ? CachedNetworkImage(
                         fit: BoxFit.cover,
-                        imageUrl: image,
+                        imageUrl: 'https://image.tmdb.org/t/p/original'
+                            '${movie.backdropPath}',
                         placeholder: (context, url) => const Center(
                           child: CircularProgressIndicator(
                             color: Colors.white,

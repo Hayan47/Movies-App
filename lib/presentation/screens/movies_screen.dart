@@ -21,9 +21,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<MoviesCubit>(context).getPopularMovies();
-    // print('allCarsList:');
-    // print(allMovies);
+    context.read<MoviesCubit>().getPopularMovies();
   }
 
   @override
@@ -140,6 +138,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
               ),
             );
           } else {
+            print('hayan');
             return const Center(
               child: CircularProgressIndicator(
                 color: Colors.black,

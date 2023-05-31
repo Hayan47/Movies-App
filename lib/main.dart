@@ -21,6 +21,9 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => favoriteCubit,
       child: MaterialApp(
+        theme: ThemeData(
+          androidOverscrollIndicator: AndroidOverscrollIndicator.stretch,
+        ),
         debugShowCheckedModeBanner: false,
         onGenerateRoute: appRouter.generateRoute,
       ),

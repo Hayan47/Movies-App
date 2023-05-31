@@ -31,14 +31,13 @@ class MoviesWebServices {
     }
   }
 
-  // Future<List<dynamic>> getQuotes(String characterName) async {
-  //   try {
-  //     Response response =
-  //         await dio.get('quote', queryParameters: {'auther': characterName});
-  //     return response.data;
-  //   } catch (e) {
-  //     // print(e.toString());
-  //     return [];
-  //   }
-  // }
+  Future<Map<String, dynamic>> getMovieDetails(int movieID) async {
+    try {
+      Response response = await dio.get(movieID.toString());
+      return response.data;
+    } catch (e) {
+      print('ERORRRRRRRRRRRRRRRRRWEB' + e.toString());
+      return {};
+    }
+  }
 }

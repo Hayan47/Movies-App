@@ -7,4 +7,5 @@ class MyColors {
   static const myBlue = Color(0xff78bcc4);
   static const myBlue2 = Color(0xff002c3e);
   static const myGold = Color(0xffFFD700);
+  static const myFire = Color(0xffe25822);
 }

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:movies_app/data/models/movie.dart';
+import 'package:movies_app/data/models/movie_details.dart';
 import 'package:movies_app/data/repository/movies_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -19,10 +20,4 @@ class MoviesCubit extends Cubit<MoviesState> {
     });
     return movies;
   }
-
-  // void getQuotes(String characterName) {
-  //   moviesRepository.getQuotes(characterName).then((quotes) {
-  //     emit(QuotesLoaded(quotes));
-  //   });
-  // }
 }

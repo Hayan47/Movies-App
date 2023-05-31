@@ -1,4 +1,5 @@
 import 'package:movies_app/business_logic/cubit/favorite_cubit.dart';
+import 'package:movies_app/business_logic/cubit/movie_details_cubit.dart';
 import 'package:movies_app/business_logic/cubit/movies_cubit.dart';
 import 'package:movies_app/constants/strings.dart';
 import 'package:movies_app/data/models/movie.dart';
@@ -13,11 +14,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class AppRouter {
   late MoviesRepository movieRepository;
   late MoviesCubit movieCubit;
+  late MovieDetailsCubit movieDetailsCubit;
   FavoriteCubit favoriteCubit = FavoriteCubit([]);
 
   AppRouter() {
     movieRepository = MoviesRepository(MoviesWebServices());
     movieCubit = MoviesCubit(movieRepository);
+    movieDetailsCubit = MovieDetailsCubit(movieRepository);
   }
 
   Route? generateRoute(RouteSettings settings) {
@@ -32,8 +35,8 @@ class AppRouter {
       case movieDetailScreen:
         final selectedMovie = settings.arguments as Movie;
         return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => movieCubit,
+            builder: (_) => BlocProvider.value(
+                  value: movieDetailsCubit,
                   child: MovieDetailsScreen(
                     selectedMovie: selectedMovie,
                   ),
