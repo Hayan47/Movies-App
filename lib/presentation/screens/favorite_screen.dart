@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:movies_app/business_logic/cubit/movie_details_cubit.dart';
-import 'package:movies_app/business_logic/cubit/movies_cubit.dart';
 import 'package:movies_app/data/models/movie.dart';
-import 'package:movies_app/data/models/movie_details.dart';
 import '../../business_logic/cubit/favorite_cubit.dart';
 import '../widgets/movie_item.dart';
 

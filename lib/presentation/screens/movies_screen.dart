@@ -14,7 +14,6 @@ class MoviesScreen extends StatefulWidget {
 
 class _MoviesScreenState extends State<MoviesScreen> {
   List<Movie> allMovies = [];
-  final _searchTextController = TextEditingController();
 
   @override
   void initState() {

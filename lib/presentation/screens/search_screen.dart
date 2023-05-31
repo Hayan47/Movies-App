@@ -1,6 +1,4 @@
-import 'package:movies_app/business_logic/cubit/movies_cubit.dart';
 import 'package:movies_app/business_logic/cubit/search_cubit.dart';
-import 'package:movies_app/constants/strings.dart';
 import 'package:movies_app/data/models/movie.dart';
 import 'package:movies_app/presentation/widgets/movie_item.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +14,6 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   List<Movie> allMovies = [];
   final _searchTextController = TextEditingController();
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   context.read<MoviesCubit>().getPopularMovies();
-  // }
 
   @override
   Widget build(BuildContext context) {
