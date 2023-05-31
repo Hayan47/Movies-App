@@ -1,8 +1,11 @@
 part of 'favorite_cubit.dart';
 
-@immutable
-abstract class FavoriteState {
-  final List<String> favoriteMovies = [];
-}
+class FavoriteState {}
 
-class FavoriteInitial extends FavoriteState {}
+class FavoritesInitial extends FavoriteState {}
+
+class FavoritesUpdated extends FavoriteState {
+  final List<int> favorites;
+
+  FavoritesUpdated(this.favorites);
+}

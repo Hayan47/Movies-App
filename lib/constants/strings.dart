@@ -4,3 +4,4 @@ final baseUrl = 'https://www.breakingbadapi.com/api/';
 const moviesScreen = '/';
 const movieDetailScreen = '/character_details';
 const favoriteScreen = '/favorite';
+const searchScreen = '/search';

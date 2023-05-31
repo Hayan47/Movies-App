@@ -39,7 +39,7 @@ class MovieItem extends StatelessWidget {
             tag: movie,
             child: Container(
                 color: Colors.black,
-                child: movie.backdropPath!.isNotEmpty
+                child: movie.backdropPath != null
                     ? CachedNetworkImage(
                         fit: BoxFit.cover,
                         imageUrl: 'https://image.tmdb.org/t/p/original'
@@ -52,7 +52,10 @@ class MovieItem extends StatelessWidget {
                         errorWidget: (context, url, error) =>
                             const Icon(Icons.error),
                       )
-                    : Image.asset('assets/images/placeHolder.png')),
+                    : Image.asset(
+                        'assets/images/movie.png',
+                        fit: BoxFit.cover,
+                      )),
           ),
         ),
       ),

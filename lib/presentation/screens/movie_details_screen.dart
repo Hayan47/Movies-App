@@ -1,15 +1,12 @@
-import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movies_app/business_logic/cubit/favorite_cubit.dart';
-import 'package:movies_app/business_logic/cubit/movies_cubit.dart';
 import 'package:movies_app/constants/my_colors.dart';
 import 'package:movies_app/data/models/movie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movies_app/data/models/movie_details.dart';
 import 'package:movies_app/presentation/widgets/movie_info_list.dart';
-
 import '../../business_logic/cubit/movie_details_cubit.dart';
 import '../widgets/movie_info.dart';
 
@@ -27,10 +24,8 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<MovieDetailsCubit>().getMovieDetails(widget.selectedMovie.id!);
-    print('h');
   }
 
   Widget buildDevider() {
@@ -118,7 +113,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       tag: widget.selectedMovie,
                       child: CachedNetworkImage(
                         imageUrl: 'https://image.tmdb.org/t/p/original'
-                            '${widget.selectedMovie.backdropPath}',
+                            '${details.backdropPath}',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -134,6 +129,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         children: [
                           Center(
                             child: Text(
+                              textAlign: TextAlign.center,
                               details.tagline!,
                               style: GoogleFonts.dancingScript(
                                 color: MyColors.myFire,
@@ -175,7 +171,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           buildDevider(),
                           MovieInfo(
                             title: 'Run Time : ',
-                            value: '${details.runtime.toString()} Days',
+                            value: '${details.runtime.toString()} minutes',
                           ),
                           buildDevider(),
                           MovieInfo(
@@ -254,7 +250,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           const SizedBox(height: 25),
                           CachedNetworkImage(
                               imageUrl: 'https://image.tmdb.org/t/p/original'
-                                  '${widget.selectedMovie.posterPath}'),
+                                  '${details.posterPath}'),
                         ],
                       ),
                     )

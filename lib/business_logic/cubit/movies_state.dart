@@ -6,7 +6,7 @@ abstract class MoviesState {}
 class MoviesInitial extends MoviesState {}
 
 class MoviesLoaded extends MoviesState {
-  final List<Movie> characters;
+  final List<Movie> movies;
 
-  MoviesLoaded(this.characters);
+  MoviesLoaded(this.movies);
 }

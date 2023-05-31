@@ -1,26 +1,27 @@
 import 'package:movies_app/business_logic/cubit/movies_cubit.dart';
+import 'package:movies_app/business_logic/cubit/search_cubit.dart';
 import 'package:movies_app/constants/strings.dart';
 import 'package:movies_app/data/models/movie.dart';
 import 'package:movies_app/presentation/widgets/movie_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MoviesScreen extends StatefulWidget {
-  const MoviesScreen({super.key});
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key});
 
   @override
-  State<MoviesScreen> createState() => _MoviesScreenState();
+  State<SearchScreen> createState() => _SearchScreenState();
 }
 
-class _MoviesScreenState extends State<MoviesScreen> {
+class _SearchScreenState extends State<SearchScreen> {
   List<Movie> allMovies = [];
   final _searchTextController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    context.read<MoviesCubit>().getPopularMovies();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   context.read<MoviesCubit>().getPopularMovies();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -28,40 +29,46 @@ class _MoviesScreenState extends State<MoviesScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Text(
-          'Popular Movies',
-          style: TextStyle(
+        title: TextField(
+          controller: _searchTextController,
+          cursorColor: Colors.white,
+          decoration: const InputDecoration(
+            hintText: 'Find A Movie..',
+            hintStyle: TextStyle(color: Colors.white, fontSize: 18),
+            border: InputBorder.none,
+          ),
+          style: const TextStyle(color: Colors.white, fontSize: 18),
+          onSubmitted: (value) {
+            context.read<SearchCubit>().getSearchedMovies(value);
+          },
+        ),
+        leading: IconButton(
+          onPressed: () {
+            allMovies.clear();
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back,
             color: Colors.white,
           ),
         ),
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, searchScreen);
-            },
-            icon: const Icon(
-              Icons.search,
-              color: Colors.white,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pushNamed(context, favoriteScreen);
+              onPressed: () {
+                setState(() {
+                  _searchTextController.clear();
+                  allMovies.clear();
+                });
               },
-              child: Image.asset(
-                'assets/icons/love2.png',
-                width: 25,
-                height: 25,
-              ),
-            ),
-          ),
+              icon: const Icon(
+                Icons.clear,
+                color: Colors.white,
+              )),
         ],
       ),
-      body: BlocBuilder<MoviesCubit, MoviesState>(
+      body: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
-          if (state is MoviesLoaded) {
+          if (state is SearchLoaded) {
             allMovies = (state).movies;
             return SingleChildScrollView(
               child: Container(
@@ -88,7 +95,6 @@ class _MoviesScreenState extends State<MoviesScreen> {
               ),
             );
           } else {
-            print('hayan');
             return const Center(
               child: CircularProgressIndicator(
                 color: Colors.black,

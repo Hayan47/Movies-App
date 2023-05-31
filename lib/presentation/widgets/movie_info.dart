@@ -9,10 +9,8 @@ class MovieInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //return  //Widget MovieInfo(String title, String value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,

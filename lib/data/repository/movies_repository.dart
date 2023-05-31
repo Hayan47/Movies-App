@@ -20,4 +20,9 @@ class MoviesRepository {
     return details;
     // .map((movieDetails) => MovieDetails.fromJson(movieDetails));
   }
+
+  Future<List<Movie>> getSearchedMovies(String title) async {
+    final movies = await moviesWebServices.getSearchedMovies(title);
+    return movies; //.map((movie) => Movie.fromJson(movie)).toList();
+  }
 }
