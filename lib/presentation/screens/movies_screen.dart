@@ -1,6 +1,7 @@
 import 'package:movies_app/business_logic/cubit/movies_cubit.dart';
 import 'package:movies_app/constants/strings.dart';
 import 'package:movies_app/data/models/movie.dart';
+import 'package:movies_app/presentation/widgets/loading_widget.dart';
 import 'package:movies_app/presentation/widgets/movie_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,12 +88,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
               ),
             );
           } else {
-            print('hayan');
-            return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.black,
-              ),
-            );
+            return const ShimmerWidget();
           }
         },
       ),
