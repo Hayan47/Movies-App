@@ -39,9 +39,9 @@ The application is divided into three main layers:
 <p float="left">
 <img src="https://github.com/Hayan47/Hayan47/blob/main/movie1.jpg" width="200" height="400" />
   $~~~~~~~~~~$
-<img src="https://github.com/Hayan47/Hayan47/blob/main/movie2.jpg" width="200" height="400" />
-  $~~~~~~~~~~$
 <img src="https://github.com/Hayan47/Hayan47/blob/main/movie3.jpg" width="200" height="400" />
+  $~~~~~~~~~~$
+<img src="https://github.com/Hayan47/Hayan47/blob/main/movie2.jpg" width="200" height="400" />
 </p>
 
 ## Conclusion
