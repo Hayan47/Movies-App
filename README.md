@@ -47,3 +47,5 @@ The application is divided into three main layers:
 ## Conclusion
 
 Movio is a powerful and easy-to-use Android application that allows users to browse trending movies, search for any movie, view its details, and add it to their favorites list. The application is built with BLoC state management, which provides a scalable and testable architecture for building complex applications. The TMDB API provides access to a vast collection of movies and TV shows, making it easy to find and discover new movies.
+
+You can download the APK file for Wave Heart from this link: https://www.mediafire.com/file/qkoigqn893n1fzn/Movio.apk/file.
