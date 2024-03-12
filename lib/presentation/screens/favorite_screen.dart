@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:movies_app/data/models/movie.dart';
-import '../../business_logic/cubit/favorite_cubit.dart';
-import '../widgets/movie_item.dart';
+import 'package:movies_app/logic/favorite_bloc/favorite_bloc.dart';
+import 'package:movies_app/presentation/widgets/movie_item.dart';
+import 'package:movies_app/presentation/widgets/shimmer_all_movies.dart';
 
 class FavoriteScreen extends StatelessWidget {
   const FavoriteScreen({super.key});
@@ -13,6 +13,7 @@ class FavoriteScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
+        iconTheme: const IconThemeData(color: Colors.white),
         backgroundColor: Colors.black,
         title: Text(
           'Favorite Movies',
@@ -21,8 +22,8 @@ class FavoriteScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: BlocBuilder<FavoriteCubit, List<Movie>>(
-        builder: (context, state) {
+      body: BlocBuilder<FavoriteBloc, FavoriteState>(builder: (context, state) {
+        if (state is FavoriteUpdated) {
           return SingleChildScrollView(
             child: Container(
               color: Colors.black,
@@ -38,16 +39,18 @@ class FavoriteScreen extends StatelessWidget {
                     shrinkWrap: true,
                     physics: const ClampingScrollPhysics(),
                     padding: EdgeInsets.zero,
-                    itemCount: state.length,
+                    itemCount: state.favorites.length,
                     itemBuilder: (context, index) =>
-                        MovieItem(movie: state[index]),
+                        MovieItem(movie: state.favorites[index]),
                   ),
                 ],
               ),
             ),
           );
-        },
-      ),
+        } else {
+          return const AllMoviesLoading();
+        }
+      }),
     );
   }
 }

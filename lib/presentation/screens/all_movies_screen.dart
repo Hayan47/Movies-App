@@ -1,29 +1,17 @@
-import 'package:movies_app/business_logic/cubit/movies_cubit.dart';
-import 'package:movies_app/constants/strings.dart';
-import 'package:movies_app/data/models/movie.dart';
-import 'package:movies_app/presentation/widgets/loading_widget.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:movies_app/logic/favorite_bloc/favorite_bloc.dart';
+import 'package:movies_app/logic/movie_bloc/movie_bloc.dart';
+import 'package:movies_app/presentation/widgets/shimmer_all_movies.dart';
 import 'package:movies_app/presentation/widgets/movie_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MoviesScreen extends StatefulWidget {
+class MoviesScreen extends StatelessWidget {
   const MoviesScreen({super.key});
 
   @override
-  State<MoviesScreen> createState() => _MoviesScreenState();
-}
-
-class _MoviesScreenState extends State<MoviesScreen> {
-  List<Movie> allMovies = [];
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<MoviesCubit>().getPopularMovies();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    context.read<MovieBloc>().add(GetPopularMovies(pageNumber: 1));
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -37,7 +25,7 @@ class _MoviesScreenState extends State<MoviesScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pushNamed(context, searchScreen);
+              Navigator.pushNamed(context, 'searchscreen');
             },
             icon: const Icon(
               Icons.search,
@@ -48,7 +36,8 @@ class _MoviesScreenState extends State<MoviesScreen> {
             padding: const EdgeInsets.only(right: 12),
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, favoriteScreen);
+                context.read<FavoriteBloc>().add(GetFavoriteList());
+                Navigator.pushNamed(context, 'favoritescreen');
               },
               child: Image.asset(
                 'assets/icons/love2.png',
@@ -59,10 +48,9 @@ class _MoviesScreenState extends State<MoviesScreen> {
           ),
         ],
       ),
-      body: BlocBuilder<MoviesCubit, MoviesState>(
+      body: BlocBuilder<MovieBloc, MovieState>(
         builder: (context, state) {
           if (state is MoviesLoaded) {
-            allMovies = (state).movies;
             return SingleChildScrollView(
               child: Container(
                 color: Colors.black,
@@ -79,16 +67,33 @@ class _MoviesScreenState extends State<MoviesScreen> {
                       shrinkWrap: true,
                       physics: const ClampingScrollPhysics(),
                       padding: EdgeInsets.zero,
-                      itemCount: allMovies.length,
+                      itemCount: state.movies.length,
                       itemBuilder: (context, index) =>
-                          MovieItem(movie: allMovies[index]),
+                          MovieItem(movie: state.movies[index]),
                     )
                   ],
                 ),
               ),
             );
+          } else if (state is MoviesError) {
+            return GestureDetector(
+              onTap: () => context
+                  .read<MovieBloc>()
+                  .add(GetPopularMovies(pageNumber: 1)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset('assets/images/tap_to_retry.png'),
+                  Text(
+                    'Error Getting Movies, Tap to Retry !',
+                    style:
+                        GoogleFonts.nunito(color: Colors.white, fontSize: 18),
+                  ),
+                ],
+              ),
+            );
           } else {
-            return const ShimmerWidget();
+            return const AllMoviesLoading();
           }
         },
       ),

@@ -14,20 +14,21 @@ class MovieInfo extends StatelessWidget {
       children: [
         Text(
           title,
-          style: GoogleFonts.karla(
+          style: GoogleFonts.nunito(
             color: Colors.red,
             fontSize: 18,
           ),
         ),
         const SizedBox(width: 10),
         Expanded(
-            child: Text(
-          value,
-          style: GoogleFonts.karla(
-            color: Colors.white,
-            fontSize: 16,
+          child: Text(
+            value,
+            style: GoogleFonts.nunito(
+              color: Colors.white,
+              fontSize: 16,
+            ),
           ),
-        )),
+        ),
       ],
     );
   }

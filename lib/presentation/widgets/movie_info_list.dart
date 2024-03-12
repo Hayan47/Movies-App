@@ -17,7 +17,7 @@ class MovieInfoList extends StatelessWidget {
       children: [
         Text(
           '$title : ',
-          style: GoogleFonts.karla(
+          style: GoogleFonts.nunito(
             color: Colors.red,
             fontSize: 18,
           ),
@@ -39,7 +39,8 @@ class MovieInfoList extends StatelessWidget {
                   child: Center(
                     child: Text(
                       '${values[index].name}',
-                      style: const TextStyle(
+                      style: GoogleFonts.nunito(
+                        fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),

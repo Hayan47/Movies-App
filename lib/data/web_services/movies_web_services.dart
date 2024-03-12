@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import '../models/movie.dart';
+import 'package:movies_app/data/models/movie_details_model.dart';
+import '../models/slide_model.dart';
 
 class MoviesWebServices {
   late Dio dio;
@@ -15,41 +16,25 @@ class MoviesWebServices {
             'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhZDEwOWZmY2IzODM1N2M2YTZmNzA3MzRlNDYwMWQ5MiIsInN1YiI6IjY0NzNhMjY2YTg5NGQ2MDBjMjYwY2FkOSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.lHlY30Y02hmU2BvNU6yv2hTcgV9e54YOLOSZg3PhXFU'
       },
     );
-
     dio = Dio(options);
   }
 
-  Future<List<Movie>> getPopularMovies() async {
-    try {
-      Response response = await dio.get('movie/popular');
-      Slide slide = Slide.fromJson(response.data);
-      //print('RESPONSEEEEEEEEEEEEE' + slide.toString());
-      return slide.results!;
-    } catch (e) {
-      print('ERORRRRRRRRRRRRRRRRRWEB' + e.toString());
-      return [];
-    }
+  Future<Page> getPopularMovies(int pageNumber) async {
+    Response response = await dio.get('movie/popular');
+    Page page = Page.fromJson(response.data);
+    return page;
   }
 
-  Future<Map<String, dynamic>> getMovieDetails(int movieID) async {
-    try {
-      Response response = await dio.get('movie/${movieID.toString()}');
-      return response.data;
-    } catch (e) {
-      print('ERORRRRRRRRRRRRRRRRRWEB' + e.toString());
-      return {};
-    }
+  Future<MovieDetails> getMovieDetails(int movieID) async {
+    Response response = await dio.get('movie/${movieID.toString()}');
+    MovieDetails movieDetails = MovieDetails.fromJson(response.data);
+    return movieDetails;
   }
 
-  Future<List<Movie>> getSearchedMovies(String title) async {
-    try {
-      Response response =
-          await dio.get('search/movie', queryParameters: {'query': title});
-      Slide slide = Slide.fromJson(response.data);
-      return slide.results!;
-    } catch (e) {
-      print('ERORRRRRRRRRRRRRRRRRWEB' + e.toString());
-      return [];
-    }
+  Future<Page> getSearchedMovies(String title) async {
+    Response response =
+        await dio.get('search/movie', queryParameters: {'query': title});
+    Page page = Page.fromJson(response.data);
+    return page;
   }
 }

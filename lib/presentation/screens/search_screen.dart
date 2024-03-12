@@ -1,19 +1,11 @@
-import 'package:movies_app/business_logic/cubit/search_cubit.dart';
-import 'package:movies_app/data/models/movie.dart';
+import 'package:movies_app/logic/search_bloc/search_bloc.dart';
 import 'package:movies_app/presentation/widgets/movie_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key});
-
-  @override
-  State<SearchScreen> createState() => _SearchScreenState();
-}
-
-class _SearchScreenState extends State<SearchScreen> {
-  List<Movie> allMovies = [];
+class SearchScreen extends StatelessWidget {
   final _searchTextController = TextEditingController();
+  SearchScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +23,11 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
           style: const TextStyle(color: Colors.white, fontSize: 18),
           onSubmitted: (value) {
-            context.read<SearchCubit>().getSearchedMovies(value);
+            context.read<SearchBloc>().add(GetSearchedMovies(query: value));
           },
         ),
         leading: IconButton(
-          onPressed: () {
-            allMovies.clear();
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(
             Icons.arrow_back,
             color: Colors.white,
@@ -46,22 +35,16 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
         actions: [
           IconButton(
-              onPressed: () {
-                setState(() {
-                  _searchTextController.clear();
-                  allMovies.clear();
-                });
-              },
+              onPressed: () => _searchTextController.clear(),
               icon: const Icon(
                 Icons.clear,
                 color: Colors.white,
               )),
         ],
       ),
-      body: BlocBuilder<SearchCubit, SearchState>(
+      body: BlocBuilder<SearchBloc, SearchState>(
         builder: (context, state) {
           if (state is SearchLoaded) {
-            allMovies = (state).movies;
             return SingleChildScrollView(
               child: Container(
                 color: Colors.black,
@@ -78,9 +61,10 @@ class _SearchScreenState extends State<SearchScreen> {
                       shrinkWrap: true,
                       physics: const ClampingScrollPhysics(),
                       padding: EdgeInsets.zero,
-                      itemCount: allMovies.length,
-                      itemBuilder: (context, index) =>
-                          MovieItem(movie: allMovies[index]),
+                      itemCount: state.movies.length,
+                      itemBuilder: (context, index) => MovieItem(
+                        movie: state.movies[index],
+                      ),
                     )
                   ],
                 ),
@@ -88,9 +72,7 @@ class _SearchScreenState extends State<SearchScreen> {
             );
           } else {
             return const Center(
-              child: CircularProgressIndicator(
-                color: Colors.black,
-              ),
+              child: CircularProgressIndicator(color: Colors.black),
             );
           }
         },
