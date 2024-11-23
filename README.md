@@ -20,3 +20,9 @@ Movio is built with BLoC state management, which provides a scalable and testabl
 - **TMDB API:** The TMDB API provides access to a vast collection of movies and TV shows.
 
   apk link: https://www.mediafire.com/file/h1kt4e5g7g83qro/Movio1.0.2.apk/file
+
+<p align="center">
+  <img src="https://github.com/Hayan47/Hayan47/blob/main/movie1.jpg" width="30%" />
+  <img src="https://github.com/Hayan47/Hayan47/blob/main/movie2.jpg" width="30%" />
+  <img src="https://github.com/Hayan47/Hayan47/blob/main/movie3.jpg" width="30%" />
+</p>
